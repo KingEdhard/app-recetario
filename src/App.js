@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import ListaRecetas from "./components/ListaRecetas";
+import NuevaReceta from "./components/NuevaReceta";
+import "babel-polyfill";
 
-function App() {
+function AppContainer() {
+  const [recetas, setRecetas] = useState(
+    JSON.parse(localStorage.getItem("recetas")) || []
+  );
+
+  return <App recetas={recetas} setRecetas={setRecetas} />;
+}
+
+function App({ recetas, setRecetas }) {
+  function agregarReceta(nuevaReceta) {
+    setRecetas((recetas) => [...recetas, nuevaReceta]);
+    localStorage.setItem("recetas", JSON.stringify([...recetas, nuevaReceta]));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {" "}
+      <h1>Recetario</h1> <NuevaReceta onAgregarReceta={agregarReceta} />{" "}
+      <ListaRecetas recetas={recetas} />{" "}
     </div>
   );
 }
-
-export default App;
+export default AppContainer;
